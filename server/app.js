@@ -1,10 +1,16 @@
 const express = require("express");
 const graphQLHTTP = require("express-graphql");
+const schema = require("./schema/schema");
 
 const app = express();
 
 // Middleware that hands off the request to express-graphQL to handle when a request is made to /graphql
-app.use("/graphql", graphQLHTTP({}));
+app.use(
+    "/graphql",
+    graphQLHTTP({
+        schema
+    })
+);
 
 // Schema needs to be passed into graphQL, which tells express-graphQL how the data is formatted
 
