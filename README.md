@@ -18,3 +18,4 @@ nodemon app
 -   React.js
 -   GraphQL
 -   Express
+-   Mongo DB
