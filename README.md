@@ -1,6 +1,6 @@
 # GraphQL
 
-Checking out what the hype is all about
+Checking out what the hype is all about. Building an onlnie library that sorts out data
 
 # Installation
 
@@ -10,3 +10,11 @@ cd graphQL-info/server
 npm install
 nodemon app
 ```
+
+# Tech
+
+-   Javascript ES 6
+-   HTML
+-   React.js
+-   GraphQL
+-   Express
