@@ -3,29 +3,24 @@ const _ = require('lodash');
 
 const { GraphQLObjectType, GraphQLString, GraphQLSchema } = graphql;
 
-const games = [
-    { name: 'Overwatch', genre: 'First Person Shooter', id: 1 },
-    { name: 'Street Fighter', genre: 'Beat em up', id: 2 },
-    { name: 'Mario', genre: 'Platformer', id: 3 }
+// mock data
+let games = [
+    { name: 'Overwatch', genre: 'First Person Shooter', id: '1' },
+    { name: 'Street Fighter', genre: 'Beat em up', id: '2' },
+    { name: 'Mario', genre: 'Platformer', id: '3' }
 ];
 
 const GameType = new GraphQLObjectType({
-    name: `Game`,
-    fields: () => {
-        id: {
-            type: GraphQLString;
-        }
-        name: {
-            type: GraphQLString;
-        }
-        genre: {
-            type: GraphQLString;
-        }
-    }
+    name: 'Game',
+    fields: () => ({
+        id: { type: GraphQLString },
+        name: { type: GraphQLString },
+        genre: { type: GraphQLString }
+    })
 });
 
 const RootQuery = new GraphQLObjectType({
-    name: `RootQueryType`,
+    name: 'RootQueryType',
     fields: {
         game: {
             type: GameType,
@@ -41,8 +36,3 @@ const RootQuery = new GraphQLObjectType({
 module.exports = new GraphQLSchema({
     query: RootQuery
 });
-
-game(id: 2) {
-    name
-    genre
-}
