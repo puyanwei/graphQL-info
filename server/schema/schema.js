@@ -1,19 +1,28 @@
 const graphql = require('graphql');
 const _ = require('lodash');
 
-const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID } = graphql;
+const {
+    GraphQLObjectType,
+    GraphQLString,
+    GraphQLSchema,
+    GraphQLID,
+    GraphQLList
+} = graphql;
 
 // mock data
 const games = [
-    { name: 'Overwatch', genre: 'First Person Shooter', id: '1', charID: '1' },
-    { name: 'Street Fighter', genre: 'Beat em up', id: '2', charID: '2' },
-    { name: 'Mario', genre: 'Platformer', id: '3', charID: '3' }
+    { name: 'Overwatch', id: '1', genreID: '1' },
+    { name: 'Street Fighter', id: '2', genreID: '2' },
+    { name: 'Mario', id: '3', genreID: '3' },
+    { name: 'Starcraft', id: '4', genreID: '4' },
+    { name: 'Sonic The Hedgehog', id: '5', genreID: '3' }
 ];
 
-const characters = [
-    { name: 'Tracer', country: 'England', id: '1' },
-    { name: 'Ryu', country: 'Japan', id: '2' },
-    { name: 'Mario', country: 'Italy', id: '3' }
+const genres = [
+    { name: 'First Person Shooter', id: '1' },
+    { name: 'Beat Em Up', id: '2' },
+    { name: 'Platformer', id: '3' },
+    { name: 'Real Time Strategy', id: '4' }
 ];
 
 const GameType = new GraphQLObjectType({
@@ -21,22 +30,26 @@ const GameType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        genre: { type: GraphQLString },
-        character: {
-            type: CharacterType,
+        genre: {
+            type: GenreType,
             resolve(parent, args) {
-                return _.find(characters, { id: parent.charID });
+                return _.find(genres, { id: parent.genreID });
             }
         }
     })
 });
 
-const CharacterType = new GraphQLObjectType({
-    name: 'Character',
+const GenreType = new GraphQLObjectType({
+    name: 'Genre',
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        country: { type: GraphQLString }
+        games: {
+            type: new GraphQLList(GameType),
+            resolve(parent, args) {
+                return _.filter(games, { genreID: parent.id });
+            }
+        }
     })
 });
 
@@ -47,16 +60,14 @@ const RootQuery = new GraphQLObjectType({
             type: GameType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                // code to get data from db/other source
                 return _.find(games, { id: args.id });
             }
         },
-        character: {
-            type: CharacterType,
+        genre: {
+            type: GenreType,
             args: { id: { type: GraphQLID } },
             resolve(parent, args) {
-                // code to get data from db/other source
-                return _.find(characters, { id: args.id });
+                return _.find(genres, { id: args.id });
             }
         }
     }
