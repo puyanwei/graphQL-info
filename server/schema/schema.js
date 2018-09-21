@@ -5,9 +5,9 @@ const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID } = graphql;
 
 // mock data
 const games = [
-    { name: 'Overwatch', genre: 'First Person Shooter', id: '1' },
-    { name: 'Street Fighter', genre: 'Beat em up', id: '2' },
-    { name: 'Mario', genre: 'Platformer', id: '3' }
+    { name: 'Overwatch', genre: 'First Person Shooter', id: '1', charID: '1' },
+    { name: 'Street Fighter', genre: 'Beat em up', id: '2', charID: '2' },
+    { name: 'Mario', genre: 'Platformer', id: '3', charID: '3' }
 ];
 
 const characters = [
@@ -21,7 +21,13 @@ const GameType = new GraphQLObjectType({
     fields: () => ({
         id: { type: GraphQLID },
         name: { type: GraphQLString },
-        genre: { type: GraphQLString }
+        genre: { type: GraphQLString },
+        character: {
+            type: CharacterType,
+            resolve(parent, args) {
+                return _.find(characters, { id: parent.charID });
+            }
+        }
     })
 });
 
